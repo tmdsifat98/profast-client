@@ -45,7 +45,7 @@ const Navbar = () => {
         </div>
       </div>
       <div className="navbar-center hidden lg:flex">
-        <ul className="flex items-center justify-center gap-3 text-lg font-semibold">{links}</ul>
+        <ul className="flex items-center justify-center gap-7 text-lg font-semibold">{links}</ul>
       </div>
       <div className="navbar-end gap-3">
        <button className="btn hover:bg-primary">Sign in</button>
