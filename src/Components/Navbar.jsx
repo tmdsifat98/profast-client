@@ -1,8 +1,12 @@
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
 import logo from "../assets/logo.png";
-import { MdArrowCircleRight, MdArrowOutward, MdMenu } from "react-icons/md";
+import { MdArrowOutward, MdMenu } from "react-icons/md";
+import Theme from "./Theme";
+import useAuth from "../hooks/useAuth";
+import Swal from "sweetalert2";
 
 const Navbar = () => {
+  const { user, logOut } = useAuth();
   const links = (
     <>
       <li>
@@ -25,12 +29,28 @@ const Navbar = () => {
       </li>
     </>
   );
+
+  const handleLogout = () => {
+    logOut().then(() => {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "User logged out successfully!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    });
+  };
   return (
-    <div className="navbar w-11/12 mx-auto bg-gray-100 my-2">
+    <div className="navbar w-11/12 mx-auto">
       <div className="navbar-start">
         <div className="dropdown">
-          <div tabIndex={0} role="button" className="cursor-pointer mr-2 lg:hidden">
-            <MdMenu size={26}/>
+          <div
+            tabIndex={0}
+            role="button"
+            className="cursor-pointer mr-2 lg:hidden"
+          >
+            <MdMenu size={26} />
           </div>
           <ul
             tabIndex={0}
@@ -45,12 +65,46 @@ const Navbar = () => {
         </div>
       </div>
       <div className="navbar-center hidden lg:flex">
-        <ul className="flex items-center justify-center gap-7 text-lg font-semibold">{links}</ul>
+        <ul className="flex items-center justify-center gap-7 text-lg font-semibold">
+          {links}
+        </ul>
       </div>
       <div className="navbar-end gap-3">
-       <button className="btn hover:bg-primary">Sign in</button>
-       <button className="btn btn-primary text-black">Be a Rider</button>
-       <button className="btn rounded-full px-2 hover:bg-primary"><MdArrowOutward size={22}/> </button>
+        <Theme />
+        {user ? (
+          <div className="dropdown">
+            <div tabIndex={0} role="button">
+              <img
+                src={user.photoURL}
+                className="w-10 h-10 rounded-full cursor-pointer"
+              />
+            </div>
+            <ul
+              tabIndex={0}
+              className="dropdown-content menu bg-base-100 items-center gap-2 rounded-box z-1 w-44 mt-2 p-2 shadow-sm"
+            >
+              <li>{user.displayName}</li>
+              <li>
+                <button
+                  onClick={handleLogout}
+                  className="btn btn-primary text-black"
+                >
+                  Logout
+                </button>
+              </li>
+            </ul>
+          </div>
+        ) : (
+          <Link to="/auth/login">
+            <button className="btn hover:bg-primary">Login</button>
+          </Link>
+        )}
+        <Link to="/beARider">
+          <button className="btn btn-primary text-black">Be a Rider</button>
+        </Link>
+        <button className="btn rounded-full px-2 hover:bg-primary">
+          <MdArrowOutward size={22} />{" "}
+        </button>
       </div>
     </div>
   );

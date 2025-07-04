@@ -4,9 +4,7 @@ import { useLoaderData } from "react-router";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import ChargeDetailsModal from "../../modals/ChargeDetailsModal";
 import Swal from "sweetalert2";
-import { loadStripe } from "@stripe/stripe-js";
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 const AddParcel = () => {
   const axiosSecure = useAxiosSecure();
   const { register, handleSubmit, watch } = useForm();
@@ -23,7 +21,6 @@ const AddParcel = () => {
   const senderRegion = watch("sender_region");
   const receiverRegion = watch("receiver_region");
   const parcelTypeWatch = watch("parcelType");
-  const weightWatch = watch("weight") ? parseFloat(watch("weight")) : 0;
   const senderCenter = watch("sender_center");
   const receiverCenter = watch("receiver_center");
   const deliveryDestination =
@@ -33,7 +30,7 @@ const AddParcel = () => {
 
   // Generate Tracking ID
   function generateTrackingID() {
-    const prefix = "TRK";
+    const prefix = "Pro";
     const randomPart = Math.random()
       .toString(36)
       .substring(2, 10)
@@ -135,25 +132,7 @@ Total Charge: ${totalCharge.toFixed(2)} TK
       allowOutsideClick: false,
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const stripe = await stripePromise;
-
-        // Create Checkout Session on server
-        const response = await axiosSecure.post("/create-checkout-session", {
-          amount: charge,
-          metadata: {
-            tracking_id: data.tracking_id,
-            sender_email: data.sender_email,
-            receiver_email: data.receiver_email,
-          },
-        });
-
-        const session = response.data;
-
-        // Redirect to Stripe Checkout
-        const result = await stripe.redirectToCheckout({
-          sessionId: session.id,
-        });
-
+        //payment redirect
         if (result.error) {
           Swal.fire("Error", result.error.message, "error");
         }
@@ -195,7 +174,7 @@ Total Charge: ${totalCharge.toFixed(2)} TK
               console.error(err);
               Swal.fire("Error", "Failed to add parcel. Try again.", "error");
             });
-        }, 2000); // এখানে payment processing simulation, তুই নিজের payment integration দিবি
+        }, 2000); // এখানে payment processing simulation
       }
     });
   };
@@ -203,10 +182,10 @@ Total Charge: ${totalCharge.toFixed(2)} TK
   const isDocument = parcelTypeWatch === "document";
 
   return (
-    <div className="max-w-6xl mx-auto bg-base-100 shadow-md rounded-xl p-8 mt-8">
+    <div className="max-w-6xl mx-auto bg-base-100 dark:bg-gray-800 dark:text-gray-200 shadow-md rounded-xl p-8 mt-8">
       <h2 className="text-3xl font-bold text-primary mb-6">Add Parcel</h2>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 ">
         {/* Parcel Type Selection */}
         <div>
           <p className="font-semibold text-lg mb-2">
@@ -239,9 +218,9 @@ Total Charge: ${totalCharge.toFixed(2)} TK
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <input
             type="email"
-            placeholder="Parcel Email"
-            {...register("parcelEmail")}
-            className="input input-bordered w-full"
+            placeholder="Parcel Name"
+            {...register("parcelName")}
+            className="input input-bordered w-full dark:bg-gray-700"
           />
         </div>
 
@@ -253,7 +232,7 @@ Total Charge: ${totalCharge.toFixed(2)} TK
             step="0.1"
             {...register("weight")}
             disabled={isDocument}
-            className={`input input-bordered w-full mt-1 ${
+            className={`input input-bordered dark:bg-gray-700 w-full mt-1 ${
               isDocument ? "bg-gray-100 cursor-not-allowed" : ""
             }`}
             placeholder="Enter weight"
@@ -267,23 +246,23 @@ Total Charge: ${totalCharge.toFixed(2)} TK
             <div className="grid grid-cols-1 gap-4">
               <input
                 {...register("sender_email", { required: true })}
-                className="input input-bordered w-full"
+                className="input input-bordered w-full dark:bg-gray-700"
                 placeholder="Email"
                 type="email"
               />
               <input
                 {...register("sender_name", { required: true })}
-                className="input input-bordered w-full"
+                className="input input-bordered w-full dark:bg-gray-700"
                 placeholder="Name"
               />
               <input
                 {...register("sender_contact", { required: true })}
-                className="input input-bordered w-full"
+                className="input input-bordered w-full dark:bg-gray-700"
                 placeholder="Contact"
               />
               <select
                 {...register("sender_region", { required: true })}
-                className="select select-bordered w-full"
+                className="select select-bordered w-full dark:bg-gray-700"
               >
                 <option value="">Select Region</option>
                 {uniqueRegions.map((region) => (
@@ -294,7 +273,7 @@ Total Charge: ${totalCharge.toFixed(2)} TK
               </select>
               <select
                 {...register("sender_center", { required: true })}
-                className="select select-bordered w-full"
+                className="select select-bordered w-full dark:bg-gray-700"
               >
                 <option value="">Select Service Center</option>
                 {getDistrictsByRegion(senderRegion).map((district) => (
@@ -305,12 +284,12 @@ Total Charge: ${totalCharge.toFixed(2)} TK
               </select>
               <input
                 {...register("sender_address", { required: true })}
-                className="input input-bordered w-full"
+                className="input input-bordered w-full dark:bg-gray-700"
                 placeholder="Address"
               />
               <textarea
                 {...register("pickup_instruction", { required: true })}
-                className="textarea textarea-bordered w-full"
+                className="textarea textarea-bordered w-full dark:bg-gray-700"
                 placeholder="Pickup Instruction"
               />
             </div>
@@ -322,23 +301,23 @@ Total Charge: ${totalCharge.toFixed(2)} TK
             <div className="grid grid-cols-1 gap-4">
               <input
                 {...register("receiver_email", { required: true })}
-                className="input input-bordered w-full"
+                className="input input-bordered w-full dark:bg-gray-700"
                 placeholder="Email"
                 type="email"
               />
               <input
                 {...register("receiver_name", { required: true })}
-                className="input input-bordered w-full"
+                className="input input-bordered w-full dark:bg-gray-700"
                 placeholder="Name"
               />
               <input
                 {...register("receiver_contact", { required: true })}
-                className="input input-bordered w-full"
+                className="input input-bordered w-full dark:bg-gray-700"
                 placeholder="Contact"
               />
               <select
                 {...register("receiver_region", { required: true })}
-                className="select select-bordered w-full"
+                className="select select-bordered w-full dark:bg-gray-700"
               >
                 <option value="">Select Region</option>
                 {uniqueRegions.map((region) => (
@@ -349,7 +328,7 @@ Total Charge: ${totalCharge.toFixed(2)} TK
               </select>
               <select
                 {...register("receiver_center", { required: true })}
-                className="select select-bordered w-full"
+                className="select select-bordered w-full dark:bg-gray-700"
               >
                 <option value="">Select Service Center</option>
                 {getDistrictsByRegion(receiverRegion).map((district) => (
@@ -360,12 +339,12 @@ Total Charge: ${totalCharge.toFixed(2)} TK
               </select>
               <input
                 {...register("receiver_address", { required: true })}
-                className="input input-bordered w-full"
+                className="input input-bordered w-full dark:bg-gray-700"
                 placeholder="Address"
               />
               <textarea
                 {...register("delivery_instruction", { required: true })}
-                className="textarea textarea-bordered w-full"
+                className="textarea textarea-bordered w-full dark:bg-gray-700"
                 placeholder="Delivery Instruction"
               />
             </div>

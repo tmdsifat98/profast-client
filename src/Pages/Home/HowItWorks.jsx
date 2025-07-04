@@ -30,22 +30,22 @@ const howItWorksData = [
 
 const HowItWorks = () => {
   return (
-    <section className="py-12 bg-gray-50">
+    <section className="py-12">
       <div className="max-w-6xl mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-10">
+        <h2 className="text-3xl font-bold text-center dark:text-white mb-10">
           How it Works
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {howItWorksData.map((item, index) => (
             <div
               key={index}
-              className="bg-white rounded-xl shadow p-6 text-center hover:shadow-lg transition"
+              className="bg-white dark:bg-gray-800 rounded-xl shadow p-6 text-center hover:shadow-lg transition"
             >
-              <div className="flex justify-center mb-4">{<item.icon size={27} />}</div>
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">
+              <div className="flex justify-center mb-4 dark:text-gray-200 ">{<item.icon size={27} />}</div>
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">
                 {item.title}
               </h3>
-              <p className="text-gray-600 text-sm">{item.description}</p>
+              <p className="text-gray-600 dark:text-gray-300 text-sm">{item.description}</p>
             </div>
           ))}
         </div>
