@@ -13,7 +13,8 @@ const SocialLogin = () => {
     googleLogin()
       .then((res) => {
         const email = res.user.email;
-        axiosLocal.post("/users", { email }).then((res) => {
+        const name = res.user.displayName;
+        axiosLocal.post("/users", { email, name }).then((res) => {
           if (res.data.insertedId || res.data.modifiedCount) {
             navigate("/");
             Swal.fire({

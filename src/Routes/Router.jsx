@@ -9,6 +9,9 @@ import Dashboard from "../Layouts/Dashboard";
 import DashboardHome from "../Pages/Dashboard/DashboardHome";
 import { BeARider } from "../Pages/Rider/BeARider";
 import PrivateRoute from "./PrivateRoute";
+import PendingRiders from "../Pages/Dashboard/PendingRiders";
+import AllRiders from "../Pages/Dashboard/AllRiders";
+import MakeAdmin from "../Pages/Dashboard/MakeAdmin";
 
 const router = createBrowserRouter([
   {
@@ -37,7 +40,12 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     Component: Dashboard,
-    children: [{ index: true, Component: DashboardHome }],
+    children: [
+      { index: true, Component: DashboardHome },
+      { path: "riderRequest", Component: PendingRiders },
+      { path: "allRiders", Component: AllRiders },
+      { path: "makeAdmin", Component: MakeAdmin },
+    ],
   },
   {
     path: "/auth",

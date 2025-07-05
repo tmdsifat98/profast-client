@@ -10,34 +10,37 @@ import useAxiosLocal from "../../hooks/useAxiosLocal";
 
 const Login = () => {
   const { loginUser } = useAuth();
-  const axiosLocal = useAxiosLocal()
+  const axiosLocal = useAxiosLocal();
 
   //   const location = useLocation();
   const navigate = useNavigate();
 
   const [showPass, setShowPass] = useState(false);
   const handleLogin = (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const email = form.email.value;
-    const password = form.password.value;
-    loginUser(email, password)
-      .then(() => {
-        axiosLocal.post("/users", {email}).then((res) => {
-          if (res.data.insertedId || res.data.modifiedCount) {
-            navigate("/");
-            Swal.fire({
-              position: "center",
-              icon: "success",
-              title: "Login successful!",
-              showConfirmButton: false,
-              timer: 1500,
-            });
-          }
-        });
-      })
-      .catch((err) => console.log(err));
-  };
+  e.preventDefault();
+  const form = e.target;
+  const email = form.email.value;
+  const password = form.password.value;
+  loginUser(email, password)
+    .then(async (res) => {
+      const name = res.user.displayName;
+
+      await axiosLocal.post("/users", { email, name }).then((res) => {
+        if (res.data.insertedId || res.data.modifiedCount) {
+          navigate("/");
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Login successful!",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      });
+    })
+    .catch((err) => console.log(err));
+};
+
   useEffect(() => {
     document.title = "Profast | Login";
   }, []);

@@ -67,7 +67,7 @@ const Navbar = () => {
             {links}
           </ul>
         </div>
-        <Logo/>
+        <Logo />
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="flex items-center justify-center gap-7 text-lg font-semibold dark:text-white">
@@ -86,7 +86,7 @@ const Navbar = () => {
             </div>
             <ul
               tabIndex={0}
-              className="dropdown-content menu bg-base-100 items-center gap-2 rounded-box z-1 w-44 mt-2 p-2 shadow-sm"
+              className="dropdown-content menu bg-base-100 items-center gap-2 rounded-box z-1 w-44 mt-2 p-2 shadow-sm right-0"
             >
               <li>{user.displayName}</li>
               <li>
@@ -97,6 +97,17 @@ const Navbar = () => {
                   Logout
                 </button>
               </li>
+              <li>
+                {" "}
+                <Link to="/beARider" className="btn btn-primary text-black md:hidden">
+                  Be a Rider
+                </Link>
+              </li>
+              <li>
+                <button className="btn rounded-full px-2 hover:bg-primary md:hidden">
+                  <MdArrowOutward size={22} />
+                </button>
+              </li>
             </ul>
           </div>
         ) : (
@@ -104,10 +115,10 @@ const Navbar = () => {
             <button className="btn hover:bg-primary">Login</button>
           </Link>
         )}
-        <Link to="/beARider">
+        <Link to="/beARider" className="hidden md:block">
           <button className="btn btn-primary text-black">Be a Rider</button>
         </Link>
-        <button className="btn rounded-full px-2 hover:bg-primary">
+        <button className="btn rounded-full px-2 hover:bg-primary hidden md:block">
           <MdArrowOutward size={22} />{" "}
         </button>
       </div>

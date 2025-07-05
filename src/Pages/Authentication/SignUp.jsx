@@ -34,9 +34,9 @@ const SignUp = () => {
         const user = res.user;
         updateProfile(user, {
           displayName: name,
-          photoURL: imageUrl,
+          photoURL: imageUrl || "https://i.ibb.co/Rk2y0f77/default.webp",
         }).then(() => {
-          axiosLocal.post("/users", { email }).then((res) => {
+          axiosLocal.post("/users", { email,name }).then((res) => {
             if (res.data.insertedId) {
               navigate("/");
               Swal.fire({
