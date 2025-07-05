@@ -1,9 +1,9 @@
 import { Link, NavLink } from "react-router";
-import logo from "../assets/logo.png";
 import { MdArrowOutward, MdMenu } from "react-icons/md";
 import Theme from "./Theme";
 import useAuth from "../hooks/useAuth";
 import Swal from "sweetalert2";
+import Logo from "./Logo";
 
 const Navbar = () => {
   const { user, logOut } = useAuth();
@@ -21,12 +21,19 @@ const Navbar = () => {
       <li>
         <NavLink to="/about-us">About Us</NavLink>
       </li>
-      <li>
-        <NavLink to="/pricing">Pricing</NavLink>
-      </li>
-      <li>
-        <NavLink to="/addParcel">Add parcel</NavLink>
-      </li>
+      {user && (
+        <>
+          <li>
+            <NavLink to="/pricing">Pricing</NavLink>
+          </li>
+          <li>
+            <NavLink to="/addParcel">Add parcel</NavLink>
+          </li>
+          <li>
+            <NavLink to="/dashboard">Dashboard</NavLink>
+          </li>
+        </>
+      )}
     </>
   );
 
@@ -59,13 +66,10 @@ const Navbar = () => {
             {links}
           </ul>
         </div>
-        <div className="relative">
-          <img src={logo} alt="" />
-          <h1 className="absolute top-4 left-6 text-2xl font-bold">Profast</h1>
-        </div>
+        <Logo/>
       </div>
       <div className="navbar-center hidden lg:flex">
-        <ul className="flex items-center justify-center gap-7 text-lg font-semibold">
+        <ul className="flex items-center justify-center gap-7 text-lg font-semibold dark:text-white">
           {links}
         </ul>
       </div>

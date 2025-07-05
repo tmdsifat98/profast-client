@@ -13,3 +13,6 @@ a.active{
     padding: 5px 18px;
     border-radius: 24px;
 }
+nav li:hover{
+  border-bottom: 2px solid #CAEB66;
+}

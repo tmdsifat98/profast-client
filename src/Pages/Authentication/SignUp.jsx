@@ -6,6 +6,7 @@ import useAuth from "../../hooks/useAuth";
 import Swal from "sweetalert2";
 import { updateProfile } from "firebase/auth";
 import { useNavigate } from "react-router";
+import SocialLogin from "./SocialLogin";
 
 const SignUp = () => {
   const { createUser } = useAuth();
@@ -81,17 +82,14 @@ const SignUp = () => {
       {/* Left Side - Form */}
       <div className="z-10 w-11/12 backdrop-blur-sm p-8 rounded shadow-2xl md:max-w-md transition-colors duration-500">
         <div className="flex justify-center mb-4">
-          <div className="relative w-24 h-24">
+          <div className="relative w-24 h-24 tooltip" data-tip="Upload image">
             {loading ? (
               <div className="w-24 h-24 rounded-full border-4 border-dashed border-gray-400 animate-spin"></div>
             ) : (
               <img
-                src={
-                  imageUrl ||
-                  "https://www.svgrepo.com/show/382106/user-circle.svg"
-                }
+                src={imageUrl || "https://i.ibb.co/Rk2y0f77/default.webp"}
                 alt="Profile"
-                className="w-24 h-24 object-cover rounded-full border"
+                className="w-24 h-24 object-cover rounded-full border dark:border-gray-600"
               />
             )}
             <input
@@ -99,18 +97,19 @@ const SignUp = () => {
               accept="image/*"
               onChange={handleImageUpload}
               className="absolute inset-0 opacity-0 cursor-pointer"
-              title="Upload Image"
             />
           </div>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* Name */}
-          <div>
-            <label className="block text-sm font-medium">Name</label>
+          <div className="space-y-1">
+            <label className="block text-sm font-medium dark:text-gray-200">
+              Name
+            </label>
             <input
               {...register("name", { required: "Name is required" })}
-              className="w-full border p-2 rounded"
+              className="w-full border p-2 rounded dark:text-gray-400"
               placeholder="Enter your name"
             />
             {errors.name && (
@@ -119,12 +118,12 @@ const SignUp = () => {
           </div>
 
           {/* Email */}
-          <div>
+          <div className="space-y-1">
             <label className="block text-sm font-medium">Email</label>
             <input
               type="email"
               {...register("email", { required: "Email is required" })}
-              className="w-full border p-2 rounded"
+              className="w-full border p-2 rounded dark:text-gray-400"
               placeholder="Enter your email"
             />
             {errors.email && (
@@ -133,12 +132,12 @@ const SignUp = () => {
           </div>
 
           {/* Password */}
-          <div>
+          <div className="space-y-1">
             <label className="block text-sm font-medium">Password</label>
             <input
               type="password"
               {...register("password", { required: "Password is required" })}
-              className="w-full border p-2 rounded"
+              className="w-full border p-2 rounded dark:text-gray-400"
               placeholder="Enter password"
             />
             {errors.password && (
@@ -147,7 +146,7 @@ const SignUp = () => {
           </div>
 
           {/* Confirm Password */}
-          <div>
+          <div className="space-y-1">
             <label className="block text-sm font-medium">
               Confirm Password
             </label>
@@ -158,7 +157,7 @@ const SignUp = () => {
                 validate: (value) =>
                   value === watch("password") || "Passwords do not match",
               })}
-              className="w-full border p-2 rounded"
+              className="w-full border p-2 rounded dark:text-gray-400"
               placeholder="Confirm password"
             />
             {errors.confirmPassword && (
@@ -168,13 +167,12 @@ const SignUp = () => {
             )}
           </div>
 
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-          >
+          <button type="submit" className="btn btn-primary w-full text-black">
             Sign Up
           </button>
         </form>
+        <div className="divider">OR</div>
+        <SocialLogin />
       </div>
 
       {/* Right Side - Image */}

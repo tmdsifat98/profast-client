@@ -5,6 +5,8 @@ import AddParcel from "../Pages/AddParcel/AddParcel";
 import AuthLayout from "../Layouts/AuthLayout";
 import Login from "../Pages/Authentication/Login";
 import SignUp from "../Pages/Authentication/SignUp";
+import Dashboard from "../Layouts/Dashboard";
+import DashboardHome from "../Pages/Dashboard/DashboardHome";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +21,11 @@ const router = createBrowserRouter([
         hydrateFallbackElement: <p>Loading...</p>,
       },
     ],
+  },
+  {
+    path:"/dashboard",Component:Dashboard,children:[
+      {index:true, Component:DashboardHome}
+    ]
   },
   {
     path: "/auth",
