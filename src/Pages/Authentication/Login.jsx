@@ -5,10 +5,12 @@ import Swal from "sweetalert2";
 import useAuth from "../../hooks/useAuth";
 import { MdOutlineEmail } from "react-icons/md";
 import authImage from "../../assets/authImage.png";
-import axios from "axios";
+import SocialLogin from "./SocialLogin";
+import useAxiosLocal from "../../hooks/useAxiosLocal";
 
 const Login = () => {
   const { loginUser } = useAuth();
+  const axiosLocal = useAxiosLocal()
 
   //   const location = useLocation();
   const navigate = useNavigate();
@@ -21,7 +23,7 @@ const Login = () => {
     const password = form.password.value;
     loginUser(email, password)
       .then(() => {
-        axios.post("http://localhost:3000/users", {email}).then((res) => {
+        axiosLocal.post("/users", {email}).then((res) => {
           if (res.data.insertedId || res.data.modifiedCount) {
             navigate("/");
             Swal.fire({
@@ -90,12 +92,14 @@ const Login = () => {
             </button>
           </div>
         </form>
-        <p className="mt-4 dark:text-gray-200">
+        <p className="mt-2 dark:text-gray-200">
           Don't have any account? Please{" "}
           <Link className="text-blue-700 hover:underline" to="/auth/signup">
             Sign Up
           </Link>
         </p>
+        <div className="divider">OR</div>
+        <SocialLogin />
       </div>
       <div>
         <img src={authImage} alt="" />

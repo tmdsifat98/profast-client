@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { MdMenu } from "react-icons/md";
 import { Link, NavLink, Outlet } from "react-router";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaHome, FaLeaf, FaMotorcycle, FaUsers } from "react-icons/fa";
 import Swal from "sweetalert2";
 import AuthContext from "../Providers/AuthContext";
 import Logo from "../Components/Logo";
@@ -27,6 +27,54 @@ const Dashboard = () => {
         });
       });
   };
+
+  const links = <><NavLink
+        to="/dashboard"
+        className={({ isActive }) =>
+          isActive
+            ? "flex items-center gap-2 bg-gray-300 py-2 pl-4 rounded dark:bg-gray-700"
+            : "flex items-center gap-2 py-2 pl-4 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
+        }
+      >
+        <FaHome />
+        Home
+      </NavLink>
+
+      <NavLink
+        to="/dashboard/myTips"
+        className={({ isActive }) =>
+          isActive
+            ? "flex items-center gap-2 bg-gray-300 py-2 pl-4 rounded dark:bg-gray-700"
+            : "flex items-center gap-2 py-2 pl-4 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
+        }
+      >
+        <FaLeaf />
+        My Tips
+      </NavLink>
+
+      <NavLink
+        to="/dashboard/riderRequest"
+        className={({ isActive }) =>
+          isActive
+            ? "flex items-center gap-2 bg-gray-300 py-2 pl-4 rounded dark:bg-gray-700"
+            : "flex items-center gap-2 py-2 pl-4 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
+        }
+      >
+        <FaMotorcycle />
+        Rider Request
+      </NavLink>
+
+      <NavLink
+        to="/dashboard/allRiders"
+        className={({ isActive }) =>
+          isActive
+            ? "flex items-center gap-2 bg-gray-300 py-2 pl-4 rounded dark:bg-gray-700"
+            : "flex items-center gap-2 py-2 pl-4 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
+        }
+      >
+        <FaUsers />
+        All Riders
+      </NavLink></>
   return (
     <div className="drawer lg:drawer-open dark:bg-gray-900 dark:text-gray-200">
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />
@@ -48,7 +96,7 @@ const Dashboard = () => {
             <Logo/>
           </div>
         </div>
-        <div>
+        <div className="px-6 py-4">
           <Outlet />
         </div>
       </div>
@@ -65,22 +113,7 @@ const Dashboard = () => {
           >
             <Logo/> 
           </Link>
-          <NavLink
-            to="/dashboard"
-            className={({ isActive }) =>
-              isActive ? "bg-gray-300 py-2 pl-4 dark:bg-gray-500" : "py-2 pl-4"
-            }
-          >
-            Home
-          </NavLink>
-          <NavLink
-            to="/dashboard/myTips"
-            className={({ isActive }) =>
-              isActive ? "bg-gray-300 py-2 pl-4 dark:bg-gray-500" : "py-2 pl-4"
-            }
-          >
-            My Tips
-          </NavLink>
+          {links}
           <button
             onClick={handleLogout}
             className="btn fixed bottom-1 w-full  bg-[#44cf44] border-none"

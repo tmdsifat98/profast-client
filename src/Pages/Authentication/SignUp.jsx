@@ -5,12 +5,17 @@ import authImage from "../../assets/authImage.png";
 import useAuth from "../../hooks/useAuth";
 import Swal from "sweetalert2";
 import { updateProfile } from "firebase/auth";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import SocialLogin from "./SocialLogin";
+import useAxiosLocal from "../../hooks/useAxiosLocal";
+import { IoEye, IoEyeOff, IoLockOpenOutline } from "react-icons/io5";
 
 const SignUp = () => {
   const { createUser } = useAuth();
+  const axiosLocal = useAxiosLocal();
   const navigate = useNavigate();
+  const [showPass, setShowPass] = useState(false);
+  const [showConfirmPass, setShowConfirmPass] = useState(false);
   const {
     register,
     handleSubmit,
@@ -31,7 +36,7 @@ const SignUp = () => {
           displayName: name,
           photoURL: imageUrl,
         }).then(() => {
-          axios.post("http://localhost:3000/users", { email }).then((res) => {
+          axiosLocal.post("/users", { email }).then((res) => {
             if (res.data.insertedId) {
               navigate("/");
               Swal.fire({
@@ -134,12 +139,21 @@ const SignUp = () => {
           {/* Password */}
           <div className="space-y-1">
             <label className="block text-sm font-medium">Password</label>
-            <input
-              type="password"
-              {...register("password", { required: "Password is required" })}
-              className="w-full border p-2 rounded dark:text-gray-400"
-              placeholder="Enter password"
-            />
+            <div className="w-full flex gap-2 justify-between items-center px-2 py-2 border  rounded-lg bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none">
+              <input
+                type={showPass ? "text" : "password"}
+                {...register("password", { required: "Password is required" })}
+                className="w-full focus:outline-none"
+                placeholder="Enter password"
+              />
+              <button
+                type="button"
+                className="cursor-pointer"
+                onClick={() => setShowPass(!showPass)}
+              >
+                {showPass ? <IoEyeOff size={19} /> : <IoEye size={19} />}
+              </button>
+            </div>
             {errors.password && (
               <p className="text-red-500 text-sm">{errors.password.message}</p>
             )}
@@ -150,16 +164,25 @@ const SignUp = () => {
             <label className="block text-sm font-medium">
               Confirm Password
             </label>
-            <input
-              type="password"
-              {...register("confirmPassword", {
-                required: "Please confirm password",
-                validate: (value) =>
-                  value === watch("password") || "Passwords do not match",
-              })}
-              className="w-full border p-2 rounded dark:text-gray-400"
-              placeholder="Confirm password"
-            />
+            <div className="w-full flex gap-2 justify-between items-center px-2 py-2 border  rounded-lg bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none">
+              <input
+                type={showConfirmPass ? "text" : "password"}
+                {...register("confirmPassword", {
+                  required: "Please confirm password",
+                  validate: (value) =>
+                    value === watch("password") || "Passwords do not match",
+                })}
+                className="w-full focus:outline-none"
+                placeholder="Confirm password"
+              />
+              <button
+                type="button"
+                className="cursor-pointer"
+                onClick={() => setShowConfirmPass(!showConfirmPass)}
+              >
+                {showConfirmPass ? <IoEyeOff size={19} /> : <IoEye size={19} />}
+              </button>
+            </div>
             {errors.confirmPassword && (
               <p className="text-red-500 text-sm">
                 {errors.confirmPassword.message}
@@ -171,13 +194,19 @@ const SignUp = () => {
             Sign Up
           </button>
         </form>
+        <p className="mt-2 dark:text-gray-200">
+          Already have an account? Please{" "}
+          <Link className="text-blue-700 hover:underline" to="/auth/login">
+            Login
+          </Link>
+        </p>
         <div className="divider">OR</div>
         <SocialLogin />
       </div>
 
       {/* Right Side - Image */}
       <div>
-        <img src={authImage} className="" />
+        <img src={authImage} className="w-[600px]" />
       </div>
     </div>
   );
